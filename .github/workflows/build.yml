@@ -1,18 +1,4 @@
-name: Build Desktop App
 
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
 name: Build Desktop App
 
 on:
@@ -37,8 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install
@@ -52,11 +37,11 @@ jobs:
           $files = Get-ChildItem -Path "dist" -Filter "*.exe" -File -ErrorAction SilentlyContinue
 
           if (-not $files) {
-            throw "ไม่พบไฟล์ EXE ในโฟลเดอร์ dist"
+            throw "No EXE installer found in dist."
           }
 
           $files | ForEach-Object {
-            Write-Host "พบไฟล์ติดตั้ง: $($_.Name)"
+            Write-Host "Found installer: $($_.Name)"
           }
 
       - name: Upload Artifacts
@@ -66,19 +51,3 @@ jobs:
           path: dist/*.exe
           if-no-files-found: error
           retention-days: 14
-
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build with Electron Builder
-        run: npx electron-builder --win --x64
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-game-exe
-          path: dist/*.exe
