@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.jsฟ
+      - name: Setup Node.js
 name: Build Desktop App
 
 on:
