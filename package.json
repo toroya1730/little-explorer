@@ -17,7 +17,8 @@
       "target": "nsis"
     },
     "files": [
-      "index_2.html",
+      "index.html",
+      "activate.html",
       "background-vdo2.mp4",
       "css/**/*",
       "js/**/*",
