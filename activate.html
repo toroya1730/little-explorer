@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>เปิดใช้งานโปรแกรม - นักสำรวจน้อย</title>
+<style>
+  body { font-family: 'Kanit', sans-serif; background: #cfeaff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+  .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; width: 400px; }
+  input { width: 80%; padding: 12px; font-size: 16px; margin: 15px 0; border: 2px solid #ccc; border-radius: 8px; text-align: center; }
+  button { background: #1e88e5; color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+  button:hover { background: #1565c0; }
+  .error { color: red; font-size: 14px; margin-top: 10px; }
+  .machine-id { font-size: 12px; color: #666; margin-top: 15px; word-break: break-all; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>🔐 เปิดใช้งานโปรแกรม</h2>
+  <p>กรุณากรอก Serial Key เพื่อเข้าใช้งาน</p>
+  <input type="text" id="keyInput" placeholder="XXXX-XXXX-XXXX">
+  <br>
+  <button id="activateBtn">ยืนยันรหัส</button>
+  <div id="msg" class="error"></div>
+  <div class="machine-id">รหัสประจำเครื่องของคุณ: <span id="displayId">กำลังโหลด...</span></div>
+</div>
+
+<script>
+  const { ipcRenderer } = require('electron');
+  
+  // ขอ Machine ID จากระบบมาแสดงให้ลูกค้าเห็น
+  ipcRenderer.invoke('get-machine-id').then(id => {
+    document.getElementById('displayId').textContent = id;
+  });
+
+  document.getElementById('activateBtn').onclick = () => {
+    const key = document.getElementById('keyInput').value.trim();
+    ipcRenderer.send('check-key', key);
+  };
+
+  ipcRenderer.on('key-result', (event, success) => {
+    if (!success) {
+      document.getElementById('msg').textContent = 'Serial Key ไม่ถูกต้อง! กรุณาตรวจสอบอีกครั้ง';
+    }
+  });
+</script>
+</body>
+</html>
