@@ -1,0 +1,29 @@
+{
+  "name": "little-explorer",
+  "version": "1.0.0",
+  "description": "เกมการเรียนรู้สำหรับเด็ก",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0"
+  },
+  "build": {
+    "appId": "com.example.explorer",
+    "productName": "นักสำรวจน้อย",
+    "win": {
+      "target": "nsis"
+    },
+    "files": [
+      "index_2.html",
+      "background-vdo2.mp4",
+      "css/**/*",
+      "js/**/*",
+      "data/**/*",
+      "assets/**/*",
+      "main.js"
+    ]
+  }
+}
