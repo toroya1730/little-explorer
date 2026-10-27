@@ -12,7 +12,61 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.jsฟ
+name: Build Desktop App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Windows EXE
+        run: npx electron-builder --win --x64 --publish never
+
+      - name: Verify EXE
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -Path "dist" -Filter "*.exe" -File -ErrorAction SilentlyContinue
+
+          if (-not $files) {
+            throw "ไม่พบไฟล์ EXE ในโฟลเดอร์ dist"
+          }
+
+          $files | ForEach-Object {
+            Write-Host "พบไฟล์ติดตั้ง: $($_.Name)"
+          }
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-game-exe
+          path: dist/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
         uses: actions/setup-node@v4
         with:
           node-version: 18
