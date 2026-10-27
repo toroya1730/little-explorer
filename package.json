@@ -1,30 +1,46 @@
+
 {
   "name": "little-explorer",
   "version": "1.0.0",
-  "description": "เกมการเรียนรู้สำหรับเด็ก",
+  "description": "Little Explorer educational game",
+  "author": "Little Explorer",
+  "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64 --publish never"
   },
   "devDependencies": {
-    "electron": "^28.0.0",
-    "electron-builder": "^24.9.0"
+    "electron": "28.3.3",
+    "electron-builder": "24.13.3"
   },
   "build": {
-    "appId": "com.example.explorer",
+    "appId": "com.littleexplorer.game",
     "productName": "นักสำรวจน้อย",
-    "win": {
-      "target": "nsis"
+    "directories": {
+      "output": "dist"
     },
     "files": [
-      "index.html",
-      "activate.html",
-      "background-vdo2.mp4",
-      "css/**/*",
-      "js/**/*",
-      "data/**/*",
-      "assets/**/*",
-      "main.js"
-    ]
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/.cache/**/*",
+      "!.github/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false
+    },
+    "publish": null
   }
 }
